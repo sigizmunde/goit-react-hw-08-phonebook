@@ -1,23 +1,24 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ContactForm from 'components/ContactForm/ContactForm';
 import ContactList from 'components/ContactList/ContactList';
 import Filter from 'components/Filter/Filter';
 import { OneLine } from './Contacts.styled';
 import { useDispatch, useSelector } from 'react-redux';
 import { filterSet, getFilter } from 'redux/filterSlice';
-import {
-  useGetContactsQuery,
-  useRemoveContactMutation,
-} from 'redux/contactsAPI';
 import Loader from 'components/Loader/Loader';
 import { VertFlexSection } from 'components/Containers/Containers.styled';
+import { loadContacts, removeContact } from 'redux/contactsThunk';
+import { getContacts, getContactsLoading } from 'redux/contactsSelectors';
 
 export const Contacts = () => {
   const dispatch = useDispatch();
-  const { data: contacts, isFetching } = useGetContactsQuery();
+  const contacts = useSelector(getContacts);
   const filter = useSelector(getFilter);
+  const isFetching = useSelector(getContactsLoading);
 
-  // console.log(contacts, filter);
+  useEffect(() => {
+    dispatch(loadContacts());
+  }, [dispatch]);
 
   const filterContacts = () =>
     contacts.filter(c => c.name.toLowerCase().includes(filter));
@@ -26,7 +27,9 @@ export const Contacts = () => {
     dispatch(filterSet(e.target.value.toLowerCase()));
   };
 
-  const [removeContact, { isLoading: isUpdating }] = useRemoveContactMutation();
+  const handleRemoveContact = id => {
+    dispatch(removeContact(id));
+  };
 
   return (
     <>
@@ -38,10 +41,13 @@ export const Contacts = () => {
         <h3>Contacts</h3>
         <Filter onChange={handleFilterChange} />
         {contacts?.length > 0 && (
-          <ContactList contacts={filterContacts()} onDelete={removeContact} />
+          <ContactList
+            contacts={filterContacts()}
+            onDelete={handleRemoveContact}
+          />
         )}
       </VertFlexSection>
-      {(isFetching || isUpdating) && <Loader />}
+      {isFetching && <Loader />}
     </>
   );
 };

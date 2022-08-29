@@ -7,7 +7,9 @@ import 'normalize.css';
 import './index.css';
 import { store, persistor } from 'redux/store';
 import { PersistGate } from 'redux-persist/integration/react';
-// import { PersistGate } from 'redux-persist/integration/react';
+import axios from 'axios';
+
+axios.defaults.baseURL = 'https://connections-api.herokuapp.com'; // axios initialization here
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

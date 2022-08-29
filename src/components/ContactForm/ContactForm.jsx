@@ -3,16 +3,19 @@ import {
   Form,
   SubmitButton,
 } from '../FormStyledComponents/FormStyledComponents.styled';
-import { nanoid } from 'nanoid';
-import { useGetContactsQuery, useAddContactMutation } from 'redux/contactsAPI';
+import { addContact } from 'redux/contactsThunk';
+import { useDispatch, useSelector } from 'react-redux';
+import { getContacts, getContactsLoading } from 'redux/contactsSelectors';
 
 const ContactForm = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
   const [nameList, setNameList] = useState('');
 
-  const { data: contacts, isFetching } = useGetContactsQuery();
-  const [addContact] = useAddContactMutation();
+  const contacts = useSelector(getContacts);
+  const isFetching = useSelector(getContactsLoading);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setNameList(contacts ? contacts.map(item => item.name) : []);
@@ -43,9 +46,8 @@ const ContactForm = () => {
     ).length;
 
     if (successCondition) {
-      addContact({ id: nanoid(), name, phone: number });
+      dispatch(addContact({ name, number }));
       clearForm();
-      // form clears only on success
     } else {
       alert(name + ' is already in contacts');
     }
