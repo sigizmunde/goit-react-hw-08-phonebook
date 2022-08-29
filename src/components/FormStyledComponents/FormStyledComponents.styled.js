@@ -1,5 +1,13 @@
 import styled from 'styled-components';
 
+export const FormCaption = styled.h2`
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  margin: 0;
+  margin-bottom: 8px;
+`;
+
 export const Form = styled.form`
   display: flex;
   flex-direction: column;

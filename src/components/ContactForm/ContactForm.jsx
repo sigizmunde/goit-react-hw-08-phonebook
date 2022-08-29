@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Form, SubmitButton } from './ContactForm.styled';
+import {
+  Form,
+  SubmitButton,
+} from '../FormStyledComponents/FormStyledComponents.styled';
 import { nanoid } from 'nanoid';
 import { useGetContactsQuery, useAddContactMutation } from 'redux/contactsAPI';
 
