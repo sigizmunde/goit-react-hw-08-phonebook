@@ -1,5 +1,6 @@
 import { ListItem } from './ContactItem.styled';
 import PropTypes from 'prop-types';
+import { Button } from '@mui/material';
 
 function ContactItem({ id, name, number, onClickDelete }) {
   return (
@@ -7,9 +8,9 @@ function ContactItem({ id, name, number, onClickDelete }) {
       <span>{name}:</span>
       <span>{number}</span>
       <span>
-        <button type="button" onClick={() => onClickDelete(id)}>
+        <Button type="button" onClick={() => onClickDelete(id)}>
           delete
-        </button>
+        </Button>
       </span>
     </ListItem>
   );

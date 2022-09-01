@@ -1,13 +1,15 @@
 import React from 'react';
-import { Label } from './Filter.styled';
+// import { Label } from './Filter.styled';
 import PropTypes from 'prop-types';
+import { TextField } from '@mui/material';
 
 function Filter({ onChange: onFilterChange }) {
   return (
-    <Label>
-      Find contacts by name
-      <input onChange={onFilterChange} />
-    </Label>
+    <TextField
+      label="Find contacts by name"
+      variant="outlined"
+      onChange={onFilterChange}
+    />
   );
 }
 

@@ -1,11 +1,8 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { logInUser, registerUser } from 'redux/authThunk';
-import {
-  Form,
-  FormCaption,
-  SubmitButton,
-} from '../FormStyledComponents/FormStyledComponents.styled';
+import { Form } from '../FormStyledComponents/FormStyledComponents.styled';
+import { Button, FormLabel, TextField } from '@mui/material';
 
 const LogInForm = ({ register = false }) => {
   const [name, setName] = useState('');
@@ -56,49 +53,51 @@ const LogInForm = ({ register = false }) => {
 
   return (
     <>
-      <FormCaption>{register ? 'Register new user' : 'Log in'}</FormCaption>
+      <FormLabel>{register ? 'Register new user' : 'Log in'}</FormLabel>
       <Form onSubmit={handleSubmit}>
         {register && (
-          <label>
-            {'Name '}
-            <input
-              type="text"
-              name="name"
-              pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-              title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-              required
-              value={name}
-              onChange={handleChange}
-            />
-          </label>
+          <TextField
+            type="text"
+            name="name"
+            label="Name"
+            variant="outlined"
+            pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+            title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
+            required
+            value={name}
+            onChange={handleChange}
+          />
         )}
-        <label>
-          {'Email '}
-          <input
-            type="email"
-            name="email"
-            //   pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
-            title="Enter the right email address"
-            required
-            value={email}
-            onChange={handleChange}
-          />
-        </label>
-        <label>
-          {'Password '}
-          <input
-            type="password"
-            name="password"
-            pattern="^.{8,}$"
-            title="Minimum length 8 characters"
-            required
-            value={password}
-            onChange={handleChange}
-          />
-        </label>
-        <SubmitButton type="submit" disabled={false}>
+        <TextField
+          type="email"
+          name="email"
+          label="email"
+          variant="outlined"
+          //   pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
+          title="Enter the right email address"
+          required
+          value={email}
+          onChange={handleChange}
+        />
+        <TextField
+          type="password"
+          name="password"
+          label="password"
+          variant="outlined"
+          pattern="^.{8,}$"
+          title="Minimum length 8 characters"
+          required
+          value={password}
+          onChange={handleChange}
+        />
+
+        <Button
+          variant={register ? 'contained' : 'outlined'}
+          type="submit"
+          disabled={email === '' || password === ''}
+        >
           {register ? 'Register new user' : 'Log in'}
-        </SubmitButton>
+        </Button>
       </Form>
     </>
   );
