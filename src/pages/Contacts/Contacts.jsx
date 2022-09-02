@@ -33,7 +33,7 @@ export const Contacts = () => {
 
   return (
     <>
-      <VertFlexSection>
+      <VertFlexSection style={{ height: '75%' }}>
         <OneLine>
           <h2>Phonebook</h2>
         </OneLine>

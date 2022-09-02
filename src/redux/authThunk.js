@@ -13,35 +13,69 @@ const token = {
   },
 };
 
-export const logInUser = createAsyncThunk('auth/logIn', async credentials => {
-  try {
-    const { data } = await axios.post('/users/login', credentials);
-    token.set(data.token);
-    return { user: data.user, token: data.token };
-  } catch (err) {
-    console.log(err);
+export const logInUser = createAsyncThunk(
+  'auth/logIn',
+  async (credentials, thunkAPI) => {
+    try {
+      const { data } = await axios.post('/users/login', credentials);
+      token.set(data.token);
+      return { user: data.user, token: data.token };
+    } catch (err) {
+      console.log(err);
+      switch (err.response.status) {
+        case 400:
+          return thunkAPI.rejectWithValue('Incorrect name or password');
+        default:
+          return thunkAPI.rejectWithValue(
+            'Uknown error code ' + err.response.status
+          );
+      }
+    }
   }
-});
+);
 
-export const logOutUser = createAsyncThunk('auth/logOut', async () => {
-  try {
-    const { data } = await axios.post('/users/logout');
-    token.unset();
-    return data;
-  } catch (err) {
-    console.log(err);
+export const logOutUser = createAsyncThunk(
+  'auth/logOut',
+  async (_, thunkAPI) => {
+    try {
+      const { data } = await axios.post('/users/logout');
+      token.unset();
+      return data;
+    } catch (err) {
+      console.log(err);
+      switch (err.response.status) {
+        case 401:
+          return thunkAPI.rejectWithValue('No token in header');
+        case 500:
+          return thunkAPI.rejectWithValue('Something is wrong with connection');
+        default:
+          return thunkAPI.rejectWithValue(
+            'Uknown error code ' + err.response.status
+          );
+      }
+    }
   }
-});
+);
 
 export const registerUser = createAsyncThunk(
   'auth/register',
-  async credentials => {
+  async (credentials, thunkAPI) => {
     try {
       const { data } = await axios.post('/users/signup', credentials);
       token.set(data.token);
       return { user: data.user, token: data.token };
     } catch (err) {
       console.log(err);
+      switch (err.response.status) {
+        case 400:
+          return thunkAPI.rejectWithValue('This email is already in use');
+        case 500:
+          return thunkAPI.rejectWithValue('Something is wrong with connection');
+        default:
+          return thunkAPI.rejectWithValue(
+            'Uknown error code ' + err.response.status
+          );
+      }
     }
   }
 );
@@ -59,6 +93,16 @@ export const fetchCurrentUser = createAsyncThunk(
       return data;
     } catch (err) {
       console.log(err);
+      switch (err.response.status) {
+        case 401:
+          return thunkAPI.rejectWithValue('You have no token');
+        case 500:
+          return thunkAPI.rejectWithValue('Something is wrong with connection');
+        default:
+          return thunkAPI.rejectWithValue(
+            'Uknown error code ' + err.response.status
+          );
+      }
     }
   }
 );
